@@ -1,0 +1,6 @@
+[package]
+name = "obj_2_smd"
+version = "0.1.0"
+authors = ["Bob Chatman <bob.chatman@gmail.com>"]
+
+[dependencies]
