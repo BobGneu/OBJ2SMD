@@ -41,10 +41,15 @@ struct Float3 {
 }
 
 #[derive(Debug, Deserialize, Clone)]
-struct Face3 {
+struct FaceComponents {
     vertex: u64,
     texture: u64,
     normal: u64
+}
+
+#[derive(Debug, Deserialize, Clone)]
+struct Face {
+    components: Vec<FaceComponents>
 }
 
 #[derive(Debug, Deserialize, Clone)]
@@ -56,7 +61,7 @@ struct GroupSpan {
 
 #[derive(Debug, Deserialize)]
 struct ObjFile {
-    faces: Vec<Face3>,
+    faces: Vec<Face>,
     vertices: Vec<Float3>,
     normals: Vec<Float3>,
     texture_coordinates: Vec<Float3>,
@@ -116,7 +121,55 @@ fn process_file(file_contents: String) -> ObjFile {
                     obj.texture_coordinates.push(vector_point);
                 },
                 "f" => {
-                    println!("Face {}, {}, {}", tokens.next().unwrap(), tokens.next().unwrap(), tokens.next().unwrap());
+                    let mut face = Face {components: [].to_vec()};
+                    let mut tmp: &str;
+                    
+                    loop {
+                        let components = tokens.next();
+
+                        if components == None {
+                            break;
+                        }
+
+                        let mut component_tokens = components.unwrap().split('/');
+                        let mut component = FaceComponents {
+                            vertex: 0,
+                            texture: 0,
+                            normal: 0
+                        };
+
+                        let vertex_index = component_tokens.next();
+                        let texture_index = component_tokens.next();
+                        let normal_index = component_tokens.next();
+
+                        if vertex_index.is_some() {
+                            tmp = vertex_index.unwrap();
+
+                            if !tmp.is_empty() {
+                                component.vertex = normal_index.unwrap().parse::<u64>().unwrap();
+                            }
+                        }
+
+                        if texture_index.is_some() {
+                            tmp = texture_index.unwrap();
+
+                            if !tmp.is_empty() {
+                                component.texture = normal_index.unwrap().parse::<u64>().unwrap();
+                            }
+                        }
+
+                        if normal_index.is_some() {
+                            tmp = normal_index.unwrap();
+
+                            if !tmp.is_empty() {
+                                component.normal = normal_index.unwrap().parse::<u64>().unwrap();
+                            }
+                        }
+
+                        face.components.push(component);
+                    }
+
+                    obj.faces.push(face);
                 },
                 _ => {
                     println!("??? {}", line);
