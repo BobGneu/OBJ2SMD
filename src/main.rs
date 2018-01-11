@@ -99,6 +99,9 @@ fn process_file(file_contents: String) -> ObjFile {
 
         if !key.is_none() {
             match key.unwrap() {
+                "#" => {
+                    // comments shouldnt be counted.
+                },
                 "g" => {
                     let group_span = GroupSpan {
                         name: String::from(tokens.next().unwrap()),
