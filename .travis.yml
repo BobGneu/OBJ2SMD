@@ -1,0 +1,27 @@
+sudo: false
+language: rust
+cache:
+  cargo: true
+  directories:
+   - $HOME/deps
+
+matrix:
+  include:
+    - os: linux
+      rust: stable
+      compiler: gcc
+    - os: linux
+      rust: nightly
+      compiler: gcc
+    - os: osx
+      rust: stable
+      osx_image: xcode9
+      compiler: clang
+    - os: osx
+      rust: nightly
+      osx_image: xcode9
+      compiler: clang
+      
+script:
+  - cargo build --verbose --all
+  - cargo test --verbose --all
