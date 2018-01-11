@@ -53,3 +53,8 @@ build: false
 test_script:
   - cargo build --verbose
   - cargo test
+
+notifications:
+  - provider: Webhook
+    url: https://webhooks.gitter.im/e/32d2a5e895aa632a5754
+    method: GET
