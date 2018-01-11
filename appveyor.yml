@@ -58,3 +58,12 @@ notifications:
   - provider: Webhook
     url: https://webhooks.gitter.im/e/32d2a5e895aa632a5754
     method: GET
+    
+artifacts:
+  - path: target/**/obj_2_smd.exe
+    name: obj_2_smd
+
+    
+cache:
+  - target
+  - C:\Users\appveyor\.cargo\registry
