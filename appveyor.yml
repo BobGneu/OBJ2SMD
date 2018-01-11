@@ -51,7 +51,7 @@ build: false
 # Equivalent to Travis' `script` phase
 # TODO modify this phase as you see fit
 test_script:
-  - cargo build --verbose
+  - cargo build --release
   - cargo test
 
 notifications:
@@ -60,10 +60,9 @@ notifications:
     method: GET
     
 artifacts:
-  - path: target/**/obj_2_smd.exe
+  - path: target/release/obj_2_smd.exe
     name: obj_2_smd
 
-    
 cache:
   - target
   - C:\Users\appveyor\.cargo\registry
