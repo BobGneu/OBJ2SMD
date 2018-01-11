@@ -146,7 +146,7 @@ fn process_file(file_contents: String) -> ObjFile {
                             tmp = vertex_index.unwrap();
 
                             if !tmp.is_empty() {
-                                component.vertex = normal_index.unwrap().parse::<u64>().unwrap();
+                                component.vertex = vertex_index.unwrap().parse::<u64>().unwrap();
                             }
                         }
 
@@ -154,7 +154,7 @@ fn process_file(file_contents: String) -> ObjFile {
                             tmp = texture_index.unwrap();
 
                             if !tmp.is_empty() {
-                                component.texture = normal_index.unwrap().parse::<u64>().unwrap();
+                                component.texture = texture_index.unwrap().parse::<u64>().unwrap();
                             }
                         }
 
