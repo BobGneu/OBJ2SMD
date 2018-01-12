@@ -6,4 +6,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[unreleased]: [Unreleased]: https://github.com/BobGneu/OBJ2SMD/compare/master...develop
+Initial files. 
+
+[unreleased]: https://github.com/BobGneu/OBJ2SMD/compare/master...develop
