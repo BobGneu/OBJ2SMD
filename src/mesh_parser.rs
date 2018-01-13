@@ -116,6 +116,144 @@ mod file_io {
     fn should_be_able_to_load_the_contents_of_the_target_file() {
         let tmp = load_file("sample/cube.obj".to_owned());
         
-        assert_eq!(tmp.len(), 553); 
+        assert_eq!(553, tmp.len()); 
+    }
+}
+
+mod obj_parser_validation_cube_1 {
+    use super::*;
+
+    const FILE_LOCATION: &str = "sample/cube.obj";
+
+    #[test]
+    fn should_have_8_vertices() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(8, tmp.vertices.len());
+    }
+
+    #[test]
+    fn should_have_0_texture_coordinates() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(0, tmp.texture_coordinates.len());
+    }
+
+    #[test]
+    fn should_have_1_groups() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(1, tmp.groups.len());
+    }
+
+    #[test]
+    fn should_have_6_normals() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(6, tmp.normals.len());
+    }
+
+    #[test]
+    fn should_have_12_faces() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(12, tmp.faces.len());
+    }
+}
+
+mod obj_parser_validation_cube_2 {
+    use super::*;
+
+    const FILE_LOCATION: &str = "sample/cube.2.obj";
+
+    #[test]
+    fn should_have_8_vertices() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(24, tmp.vertices.len());
+    }
+
+    #[test]
+    fn should_have_24_texture_coordinates() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(24, tmp.texture_coordinates.len());
+    }
+
+    #[test]
+    fn should_have_2_groups() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(2, tmp.groups.len());
+    }
+
+    #[test]
+    fn should_have_6_normals() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(24, tmp.normals.len());
+    }
+
+    #[test]
+    fn should_have_12_faces() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(12, tmp.faces.len());
+    }
+}
+
+mod obj_parser_validation_cube_3 {
+    use super::*;
+
+    const FILE_LOCATION: &str = "sample/blender.cube.obj";
+
+    #[test]
+    fn should_have_8_vertices() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(8, tmp.vertices.len());
+    }
+
+    #[test]
+    fn should_have_0_texture_coordinates() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(0, tmp.texture_coordinates.len());
+    }
+
+    #[test]
+    fn should_have_2_groups() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(0, tmp.groups.len());
+    }
+
+    #[test]
+    fn should_have_6_normals() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(6, tmp.normals.len());
+    }
+
+    #[test]
+    fn should_have_6_faces() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(6, tmp.faces.len());
     }
 }
