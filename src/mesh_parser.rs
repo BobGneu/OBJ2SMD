@@ -1,60 +1,17 @@
 use std::fs::File;
 use std::io::prelude::*;
 
-use std::str::SplitWhitespace;
+use obj_file::*;
+use conversion::*;
 
-#[derive(Debug, Deserialize, Clone)]
-pub struct Float3 {
-    pub x: f64,
-    pub y: f64,
-    pub z: f64
-}
-
-#[derive(Debug, Deserialize, Clone)]
-pub struct FaceComponents {
-    pub vertex: u64,
-    pub texture: u64,
-    pub normal: u64
-}
-
-#[derive(Debug, Deserialize, Clone)]
-pub struct Face {
-    pub components: Vec<FaceComponents>
-}
-
-#[derive(Debug, Deserialize, Clone)]
-pub struct GroupSpan {
-    pub name: String,
-    pub start: u64,
-    pub end: u64
-}
-
-#[derive(Debug, Deserialize)]
-pub struct ObjFile {
-    pub faces: Vec<Face>,
-    pub vertices: Vec<Float3>,
-    pub normals: Vec<Float3>,
-    pub texture_coordinates: Vec<Float3>,
-    pub groups: Vec<GroupSpan>
-}
-
+/// Load a file into string format
 pub fn load_file(file_source: String) -> String {
     let mut contents = String::new();
-
-    println!("source: {}", file_source);
 
     let mut f = File::open(file_source).expect("file not found");
     f.read_to_string(&mut contents).expect("something went wrong reading the file");
 
     return contents;
-}
-
-fn str_to_f64(value: Option<&str>) -> f64 {
-    return value.unwrap().parse::<f64>().unwrap();
-}
-
-fn token_to_float3(mut iterator: SplitWhitespace) -> Float3 {
-    return Float3 {x:str_to_f64(iterator.next()), y: str_to_f64(iterator.next()), z: str_to_f64(iterator.next())};
 }
 
 pub fn process_file(file_contents: String) -> ObjFile {
@@ -149,4 +106,16 @@ pub fn process_file(file_contents: String) -> ObjFile {
     }
 
     return obj;
+}
+
+#[cfg(test)]
+mod file_io {
+    use super::*;
+
+    #[test]
+    fn should_be_able_to_load_the_contents_of_the_target_file() {
+        let tmp = load_file("sample/cube.obj".to_owned());
+        
+        assert_eq!(tmp.len(), 553); 
+    }
 }

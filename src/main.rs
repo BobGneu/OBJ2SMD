@@ -3,9 +3,12 @@ extern crate serde_derive;
 extern crate docopt;
 
 mod cmd;
+mod obj_file;
+mod conversion;
 mod mesh_parser;
 
 use cmd::parse_command_options;
+
 use mesh_parser::load_file;
 use mesh_parser::process_file;
 
