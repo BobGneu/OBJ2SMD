@@ -108,18 +108,6 @@ pub fn process_file(file_contents: String) -> ObjFile {
     return obj;
 }
 
-#[cfg(test)]
-mod file_io {
-    use super::*;
-
-    #[test]
-    fn should_be_able_to_load_the_contents_of_the_target_file() {
-        let tmp = load_file("sample/cube.obj".to_owned());
-        
-        assert_eq!(553, tmp.len()); 
-    }
-}
-
 mod obj_parser_validation_cube_1 {
     use super::*;
 
