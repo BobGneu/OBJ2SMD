@@ -1,6 +1,8 @@
 use std::fs::File;
 use std::io::prelude::*;
 
+use std::str::SplitWhitespace;
+
 #[derive(Debug, Deserialize, Clone)]
 pub struct Float3 {
     pub x: f64,
@@ -47,6 +49,14 @@ pub fn load_file(file_source: String) -> String {
     return contents;
 }
 
+fn str_to_f64(value: Option<&str>) -> f64 {
+    return value.unwrap().parse::<f64>().unwrap();
+}
+
+fn token_to_float3(mut iterator: SplitWhitespace) -> Float3 {
+    return Float3 {x:str_to_f64(iterator.next()), y: str_to_f64(iterator.next()), z: str_to_f64(iterator.next())};
+}
+
 pub fn process_file(file_contents: String) -> ObjFile {
     let mut obj = ObjFile {faces: [].to_vec(), groups:[].to_vec(), normals: [].to_vec(), texture_coordinates: [].to_vec(), vertices: [].to_vec()};
 
@@ -69,15 +79,15 @@ pub fn process_file(file_contents: String) -> ObjFile {
                     obj.groups.push(group_span);
                 },
                 "v" => {
-                    let vector_point = Float3 {x:tokens.next().unwrap().parse::<f64>().unwrap(), y: tokens.next().unwrap().parse::<f64>().unwrap(), z: tokens.next().unwrap().parse::<f64>().unwrap()};
+                    let vector_point = token_to_float3(tokens);
                     obj.vertices.push(vector_point);
                 },
                 "vn" => {
-                    let vector_point = Float3 {x:tokens.next().unwrap().parse::<f64>().unwrap(), y: tokens.next().unwrap().parse::<f64>().unwrap(), z: tokens.next().unwrap().parse::<f64>().unwrap()};
+                    let vector_point = token_to_float3(tokens);
                     obj.normals.push(vector_point);
                 },
                 "vt" => {
-                    let vector_point = Float3 {x:tokens.next().unwrap().parse::<f64>().unwrap(), y: tokens.next().unwrap().parse::<f64>().unwrap(), z: tokens.next().unwrap().parse::<f64>().unwrap()};
+                    let vector_point = token_to_float3(tokens);
                     obj.texture_coordinates.push(vector_point);
                 },
                 "f" => {
