@@ -18,17 +18,17 @@ matrix:
     - os: linux
       rust: stable
       compiler: gcc
-    - os: linux
-      rust: nightly
-      compiler: gcc
+#    - os: linux
+#      rust: nightly
+#      compiler: gcc
     - os: osx
       rust: stable
       osx_image: xcode9
       compiler: clang
-    - os: osx
-      rust: nightly
-      osx_image: xcode9
-      compiler: clang
+#    - os: osx
+#      rust: nightly
+#      osx_image: xcode9
+#      compiler: clang
 
 script:
   - cargo test --verbose
