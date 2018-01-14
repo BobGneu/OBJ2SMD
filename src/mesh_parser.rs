@@ -222,7 +222,7 @@ mod obj_parser_validation_cube_3 {
     }
 
     #[test]
-    fn should_have_2_groups() {
+    fn should_have_0_groups() {
         let contents = load_file(FILE_LOCATION.to_owned());
         let tmp = process_file(contents);
 
@@ -243,5 +243,143 @@ mod obj_parser_validation_cube_3 {
         let tmp = process_file(contents);
 
         assert_eq!(6, tmp.faces.len());
+    }
+}
+
+mod obj_parser_validation_cube_4 {
+    use super::*;
+
+    const FILE_LOCATION: &str = "sample/blender.cube.triangulated.obj";
+
+    #[test]
+    fn should_have_8_vertices() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(8, tmp.vertices.len());
+    }
+
+    #[test]
+    fn should_have_0_texture_coordinates() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(0, tmp.texture_coordinates.len());
+    }
+
+    #[test]
+    fn should_have_2_groups() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(2, tmp.groups.len());
+    }
+
+    #[test]
+    fn should_have_6_normals() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(6, tmp.normals.len());
+    }
+
+    #[test]
+    fn should_have_12_faces() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(12, tmp.faces.len());
+    }
+}
+
+mod obj_parser_validation_sphere_1 {
+    use super::*;
+
+    const FILE_LOCATION: &str = "sample/blender.sphere.obj";
+
+    #[test]
+    fn should_have_482_vertices() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(482, tmp.vertices.len());
+    }
+
+    #[test]
+    fn should_have_0_texture_coordinates() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(0, tmp.texture_coordinates.len());
+    }
+
+    #[test]
+    fn should_have_1_groups() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(1, tmp.groups.len());
+    }
+
+    #[test]
+    fn should_have_512_normals() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(512, tmp.normals.len());
+    }
+
+    #[test]
+    fn should_have_512_faces() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(512, tmp.faces.len());
+    }
+}
+
+mod obj_parser_validation_sphere_2 {
+    use super::*;
+
+    const FILE_LOCATION: &str = "sample/blender.sphere.triangulated.obj";
+
+    #[test]
+    fn should_have_482_vertices() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(482, tmp.vertices.len());
+    }
+
+    #[test]
+    fn should_have_0_texture_coordinates() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(0, tmp.texture_coordinates.len());
+    }
+
+    #[test]
+    fn should_have_1_groups() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(1, tmp.groups.len());
+    }
+
+    #[test]
+    fn should_have_528_normals() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(528, tmp.normals.len());
+    }
+
+    #[test]
+    fn should_have_528_faces() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert_eq!(960, tmp.faces.len());
     }
 }
