@@ -18,5 +18,10 @@ fn main() {
     let contents = load_file(args.arg_source);
     let obj = process_file(contents);
 
-    println!("{:?}", obj);
+    if (!obj.is_valid()) {
+        println!("The mesh you provided was invalid.");
+    } else {
+        println!("Mesh loaded. Beginning conversion.");
+        println!("{:?}", obj);
+    }
 }

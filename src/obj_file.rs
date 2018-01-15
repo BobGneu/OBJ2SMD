@@ -32,3 +32,20 @@ pub struct ObjFile {
     pub texture_coordinates: Vec<Float3>,
     pub groups: Vec<GroupSpan>
 }
+
+impl ObjFile {
+    pub fn is_valid(&self) -> bool {
+        return self.faces.len() > 0 && self.vertices.len() > 0 && self.groups.len() > 0 && self.is_triangulated();
+    }
+
+    pub fn is_triangulated(&self) -> bool {
+        for face in self.faces.iter() {
+            if (face.components.len() > 3) {
+                println!("Faces were not triangulated.");
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
