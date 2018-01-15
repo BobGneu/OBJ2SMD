@@ -73,7 +73,7 @@ pub fn process_file(file_contents: String) -> ObjFile {
                             tmp = vertex_index.unwrap();
 
                             if !tmp.is_empty() {
-                                component.vertex = vertex_index.unwrap().parse::<u64>().unwrap();
+                                component.vertex = vertex_index.unwrap().parse::<usize>().unwrap();
                             }
                         }
 
@@ -81,7 +81,7 @@ pub fn process_file(file_contents: String) -> ObjFile {
                             tmp = texture_index.unwrap();
 
                             if !tmp.is_empty() {
-                                component.texture = texture_index.unwrap().parse::<u64>().unwrap();
+                                component.texture = texture_index.unwrap().parse::<usize>().unwrap();
                             }
                         }
 
@@ -89,7 +89,7 @@ pub fn process_file(file_contents: String) -> ObjFile {
                             tmp = normal_index.unwrap();
 
                             if !tmp.is_empty() {
-                                component.normal = normal_index.unwrap().parse::<u64>().unwrap();
+                                component.normal = normal_index.unwrap().parse::<usize>().unwrap();
                             }
                         }
 

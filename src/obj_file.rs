@@ -7,9 +7,9 @@ pub struct Float3 {
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct FaceComponents {
-    pub vertex: u64,
-    pub texture: u64,
-    pub normal: u64
+    pub vertex: usize,
+    pub texture: usize,
+    pub normal: usize
 }
 
 #[derive(Debug, Deserialize, Clone)]
@@ -20,8 +20,8 @@ pub struct Face {
 #[derive(Debug, Deserialize, Clone)]
 pub struct GroupSpan {
     pub name: String,
-    pub start: u64,
-    pub end: u64
+    pub start: usize,
+    pub end: usize
 }
 
 #[derive(Debug, Deserialize)]
@@ -33,15 +33,55 @@ pub struct ObjFile {
     pub groups: Vec<GroupSpan>
 }
 
-impl ObjFile {
-    pub fn is_valid(&self) -> bool {
-        return self.faces.len() > 0 && self.vertices.len() > 0 && self.groups.len() > 0 && self.is_triangulated();
+impl Face {
+    pub fn is_valid(&self, vertices: &Vec<Float3>, texture_coordinates: &Vec<Float3>, normals: &Vec<Float3>) -> bool {
+        return self.is_triangulated() && 
+            self.vertices_exist(&vertices) && 
+            self.normals_exist(&normals) && 
+            self.texture_coordinates_exist(&texture_coordinates);
     }
 
-    pub fn is_triangulated(&self) -> bool {
+    fn is_triangulated(&self) -> bool {
+        return self.components.len() == 3;
+    }
+
+    fn vertices_exist(&self, vertices: &Vec<Float3>) -> bool {
+        return self.components[0].vertex <= vertices.len();
+    }
+
+    fn normals_exist(&self, normals: &Vec<Float3>) -> bool {
+        return self.components[0].normal <= normals.len();
+    }
+
+    fn texture_coordinates_exist(&self, texture_coordinates: &Vec<Float3>) -> bool {
+        return self.components[0].texture <= texture_coordinates.len();
+    }
+}
+
+impl ObjFile {
+    pub fn is_valid(&self) -> bool {
+        return self.vertices_are_valid() && 
+            self.normals_are_valid() && 
+            self.texture_coordinates_are_valid() && 
+            self.faces_are_valid();
+    }
+
+    fn vertices_are_valid(&self) -> bool {
+        return self.vertices.len() > 0;
+    }
+
+    fn normals_are_valid(&self) -> bool {
+        return self.normals.len() > 0;
+    }
+
+    fn texture_coordinates_are_valid(&self) -> bool {
+        return self.texture_coordinates.len() >= 0;
+    }
+
+    fn faces_are_valid(&self) -> bool {
         for face in self.faces.iter() {
-            if (face.components.len() > 3) {
-                println!("Faces were not triangulated.");
+            if (!face.is_valid(&self.vertices, &self.texture_coordinates, &self.normals)) {
+                // TODO: Better error message here.
                 return false;
             }
         }
