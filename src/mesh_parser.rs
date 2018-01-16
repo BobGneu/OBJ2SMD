@@ -16,6 +16,7 @@ pub fn load_file(file_source: String) -> String {
 
 pub fn process_file(file_contents: String) -> ObjFile {
     let mut obj = ObjFile {faces: [].to_vec(), groups:[].to_vec(), normals: [].to_vec(), texture_coordinates: [].to_vec(), vertices: [].to_vec()};
+    let mut group_span = GroupSpan {start: 0, end: 0, name: "".to_string()};
 
     for line in file_contents.lines() {
         let mut tokens = line.trim().split_whitespace();
@@ -27,13 +28,18 @@ pub fn process_file(file_contents: String) -> ObjFile {
                     // comments shouldnt be counted.
                 },
                 "g" => {
-                    let group_span = GroupSpan {
+                    if group_span.name != "" {
+                        group_span.end = obj.faces.len();
+                        obj.groups.push(group_span);
+                    }
+
+                    group_span = GroupSpan {
                         name: String::from(tokens.next().unwrap()),
-                        start: 0,
-                        end: 42
+                        start: obj.faces.len(),
+                        end: obj.faces.len()
                     };
 
-                    obj.groups.push(group_span);
+                    println!("start> {}", obj.faces.len());
                 },
                 "v" => {
                     let vector_point = token_to_float3(tokens);
@@ -105,9 +111,17 @@ pub fn process_file(file_contents: String) -> ObjFile {
         }
     }
 
+    println!("end>   {}", obj.faces.len());
+
+    if group_span.name != "" {
+        group_span.end = obj.faces.len();
+        obj.groups.push(group_span);
+    }
+
     return obj;
 }
 
+#[cfg(test)]
 mod obj_parser_validation_cube_1 {
     use super::*;
 
@@ -134,7 +148,20 @@ mod obj_parser_validation_cube_1 {
         let contents = load_file(FILE_LOCATION.to_owned());
         let tmp = process_file(contents);
 
+        println!("{:?}", tmp.groups);
+
         assert_eq!(1, tmp.groups.len());
+    }
+
+    #[test]
+    fn should_have_1_group_validating_span() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        let span = &tmp.groups[0];
+
+        assert_eq!(0, span.start);
+        assert_eq!(12, span.end);
     }
 
     #[test]
@@ -152,8 +179,17 @@ mod obj_parser_validation_cube_1 {
 
         assert_eq!(12, tmp.faces.len());
     }
+
+    #[test] 
+    fn is_valid_mesh() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert!(tmp.is_valid());
+    }
 }
 
+#[cfg(test)]
 mod obj_parser_validation_cube_2 {
     use super::*;
 
@@ -184,6 +220,28 @@ mod obj_parser_validation_cube_2 {
     }
 
     #[test]
+    fn should_have_2_group_validating_span_1() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        let span = &tmp.groups[0];
+
+        assert_eq!(0, span.start);
+        assert_eq!(0, span.end);
+    }
+
+    #[test]
+    fn should_have_2_group_validating_span_2() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        let span = &tmp.groups[1];
+
+        assert_eq!(0, span.start);
+        assert_eq!(12, span.end);
+    }
+
+    #[test]
     fn should_have_6_normals() {
         let contents = load_file(FILE_LOCATION.to_owned());
         let tmp = process_file(contents);
@@ -198,8 +256,17 @@ mod obj_parser_validation_cube_2 {
 
         assert_eq!(12, tmp.faces.len());
     }
+
+    #[test] 
+    fn is_valid_mesh() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert!(tmp.is_valid());
+    }
 }
 
+#[cfg(test)]
 mod obj_parser_validation_cube_3 {
     use super::*;
 
@@ -244,8 +311,17 @@ mod obj_parser_validation_cube_3 {
 
         assert_eq!(6, tmp.faces.len());
     }
+
+    #[test] 
+    fn is_not_valid_mesh() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert!(!tmp.is_valid());
+    }
 }
 
+#[cfg(test)]
 mod obj_parser_validation_cube_4 {
     use super::*;
 
@@ -276,6 +352,28 @@ mod obj_parser_validation_cube_4 {
     }
 
     #[test]
+    fn should_have_2_group_validating_span_1() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        let span = &tmp.groups[0];
+
+        assert_eq!(0, span.start);
+        assert_eq!(0, span.end);
+    }
+
+    #[test]
+    fn should_have_2_group_validating_span_2() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        let span = &tmp.groups[1];
+
+        assert_eq!(0, span.start);
+        assert_eq!(12, span.end);
+    }
+
+    #[test]
     fn should_have_6_normals() {
         let contents = load_file(FILE_LOCATION.to_owned());
         let tmp = process_file(contents);
@@ -290,8 +388,17 @@ mod obj_parser_validation_cube_4 {
 
         assert_eq!(12, tmp.faces.len());
     }
+
+    #[test] 
+    fn is_valid_mesh() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert!(tmp.is_valid());
+    }
 }
 
+#[cfg(test)]
 mod obj_parser_validation_sphere_1 {
     use super::*;
 
@@ -322,6 +429,17 @@ mod obj_parser_validation_sphere_1 {
     }
 
     #[test]
+    fn should_have_2_group_validating_span_1() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        let span = &tmp.groups[0];
+
+        assert_eq!(0, span.start);
+        assert_eq!(512, span.end);
+    }
+
+    #[test]
     fn should_have_512_normals() {
         let contents = load_file(FILE_LOCATION.to_owned());
         let tmp = process_file(contents);
@@ -336,8 +454,17 @@ mod obj_parser_validation_sphere_1 {
 
         assert_eq!(512, tmp.faces.len());
     }
+
+    #[test] 
+    fn is_not_valid_mesh() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert!(!tmp.is_valid());
+    }
 }
 
+#[cfg(test)]
 mod obj_parser_validation_sphere_2 {
     use super::*;
 
@@ -368,6 +495,17 @@ mod obj_parser_validation_sphere_2 {
     }
 
     #[test]
+    fn should_have_2_group_validating_span_1() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        let span = &tmp.groups[0];
+
+        assert_eq!(0, span.start);
+        assert_eq!(960, span.end);
+    }
+
+    #[test]
     fn should_have_528_normals() {
         let contents = load_file(FILE_LOCATION.to_owned());
         let tmp = process_file(contents);
@@ -381,5 +519,13 @@ mod obj_parser_validation_sphere_2 {
         let tmp = process_file(contents);
 
         assert_eq!(960, tmp.faces.len());
+    }
+
+    #[test] 
+    fn is_valid_mesh() {
+        let contents = load_file(FILE_LOCATION.to_owned());
+        let tmp = process_file(contents);
+
+        assert!(tmp.is_valid());
     }
 }

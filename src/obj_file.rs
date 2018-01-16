@@ -63,7 +63,12 @@ impl ObjFile {
         return self.vertices_are_valid() && 
             self.normals_are_valid() && 
             self.texture_coordinates_are_valid() && 
+            self.has_groups() && 
             self.faces_are_valid();
+    }
+
+    fn has_groups(&self) -> bool {
+        return self.groups.len() > 0;
     }
 
     fn vertices_are_valid(&self) -> bool {

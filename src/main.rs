@@ -6,11 +6,13 @@ mod cmd;
 mod obj_file;
 mod conversion;
 mod mesh_parser;
+mod smd;
 
 use cmd::parse_command_options;
 
 use mesh_parser::load_file;
 use mesh_parser::process_file;
+use smd::convert_obj;
 
 fn main() {
     let args = parse_command_options();
@@ -20,8 +22,11 @@ fn main() {
 
     if !obj.is_valid() {
         println!("The mesh you provided was invalid.");
-    } else {
-        println!("Mesh loaded. Beginning conversion.");
-        println!("{:?}", obj);
-    }
+        return;
+    } 
+
+    println!("Mesh loaded. Beginning conversion.");
+
+    let smdFile = convert_obj(&obj);
+    println!("{:?}", smdFile);
 }
