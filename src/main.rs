@@ -28,5 +28,6 @@ fn main() {
     println!("Mesh loaded. Beginning conversion.");
 
     let smdFile = convert_obj(&obj);
-    println!("{:?}", smdFile);
+
+    smdFile.save("./out.smd");
 }

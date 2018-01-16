@@ -36,6 +36,10 @@ impl SMD {
         return "".to_string();
     }
 
+    pub fn save(&self, destination: &str) {
+
+    }
+
     pub fn is_valid(&self) -> bool {
         if self.entries.len() == 0 {
             return false
@@ -65,70 +69,6 @@ impl Float8 {
     pub fn to_string(&self) -> String {
         // <float|PosX PosY PosZ> <normal|NormX NormY NormZ> <normal|U V> 
         return format!("{:.4}\t{:.4}\t{:.4}\t{:.4}\t{:.4}\t{:.4}\t{:.4}\t{:.4}", self.x, self.y, self.z, self.x_norm, self.y_norm, self.z_norm, self.u, self.v);
-    }
-}
-
-#[cfg(test)]
-mod SMD_test_cases {
-    use super::*;
-
-    #[test]
-    fn is_invalid_when_has_0_entries() {
-        let smd = SMD {entries: [].to_vec()};
-
-        assert!(!smd.is_valid());
-    }
-
-    #[test]
-    fn is_invalid_when_has_1_empty_smdentry() {
-        let mut smd = SMD {entries: [].to_vec()};
-
-        smd.entries.push(SMDEntry {group: 0, image_name: "".to_owned(), points: [].to_vec()});
-
-        assert!(!smd.is_valid());
-    }
-
-    #[test]
-    fn is_valid_when_has_1_valid_entry() {
-        let mut smd = SMD {entries: [].to_vec()};
-        let mut smdEntry = SMDEntry {group: 0, image_name: "test_image.tga".to_owned(), points: [].to_vec()};
-
-        smdEntry.points.push(Float8 {
-            u: 0.00,
-            v: 0.00,
-            x: 0.00,
-            y: 0.00,
-            z: 0.00,
-            x_norm: 0.00,
-            y_norm: 0.00,
-            z_norm: 0.00
-        });
-
-        smdEntry.points.push(Float8 {
-            u: 0.00,
-            v: 0.00,
-            x: 0.00,
-            y: 0.00,
-            z: 0.00,
-            x_norm: 0.00,
-            y_norm: 0.00,
-            z_norm: 0.00
-        });
-
-        smdEntry.points.push(Float8 {
-            u: 0.00,
-            v: 0.00,
-            x: 0.00,
-            y: 0.00,
-            z: 0.00,
-            x_norm: 0.00,
-            y_norm: 0.00,
-            z_norm: 0.00
-        });
-
-        smd.entries.push(smdEntry);
-
-        assert!(smd.is_valid());
     }
 }
 
