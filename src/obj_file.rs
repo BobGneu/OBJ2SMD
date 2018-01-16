@@ -80,7 +80,7 @@ impl ObjFile {
 
     fn faces_are_valid(&self) -> bool {
         for face in self.faces.iter() {
-            if (!face.is_valid(&self.vertices, &self.texture_coordinates, &self.normals)) {
+            if !face.is_valid(&self.vertices, &self.texture_coordinates, &self.normals) {
                 // TODO: Better error message here.
                 return false;
             }
