@@ -38,8 +38,6 @@ pub fn process_file(file_contents: String) -> ObjFile {
                         start: obj.faces.len(),
                         end: obj.faces.len()
                     };
-
-                    println!("start> {}", obj.faces.len());
                 },
                 "v" => {
                     let vector_point = token_to_float3(tokens);
@@ -110,8 +108,6 @@ pub fn process_file(file_contents: String) -> ObjFile {
             }
         }
     }
-
-    println!("end>   {}", obj.faces.len());
 
     if group_span.name != "" {
         group_span.end = obj.faces.len();
