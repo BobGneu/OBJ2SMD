@@ -11,7 +11,9 @@ mod smd;
 use cmd::parse_command_options;
 
 use mesh_parser::load_file;
+use mesh_parser::store_file;
 use mesh_parser::process_file;
+
 use smd::convert_obj;
 
 fn main() {
@@ -29,5 +31,5 @@ fn main() {
 
     let smdFile = convert_obj(&obj);
 
-    smdFile.save("./out.smd");
+    store_file("./out.smd".to_string(), smdFile.to_string());
 }

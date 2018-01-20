@@ -3,6 +3,7 @@ use std::io::prelude::*;
 
 use obj_file::*;
 use conversion::*;
+use std::path::Path;
 
 /// Load a file into string format
 pub fn load_file(file_source: String) -> String {
@@ -12,6 +13,17 @@ pub fn load_file(file_source: String) -> String {
     f.read_to_string(&mut contents).expect("something went wrong reading the file");
 
     return contents;
+}
+
+/// Load a file into string format
+pub fn store_file(file_source: String, contents: String) {
+    let path = Path::new(&file_source);
+    let display = path.display();
+
+    println!("{}", display);
+
+    let mut f = File::create(path).expect("file not found");
+    f.write_all(contents.as_bytes()).expect("something went wrong writing the file");
 }
 
 pub fn process_file(file_contents: String) -> ObjFile {

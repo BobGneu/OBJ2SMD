@@ -76,7 +76,7 @@ impl ObjFile {
     }
 
     fn normals_are_valid(&self) -> bool {
-        return self.normals.len() > 0;
+        return self.normals.len() > 0; 
     }
 
     fn texture_coordinates_are_valid(&self) -> bool {

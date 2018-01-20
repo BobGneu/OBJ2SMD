@@ -1,8 +1,11 @@
 // https://developer.valvesoftware.com/wiki/Studiomdl_Data
 use obj_file::ObjFile;
 
+use obj_file::Face;
+
 #[derive(Debug, Clone)]
 pub struct SMD {
+    pub groups: Vec<String>,
     pub entries: Vec<SMDEntry>
 }
 
@@ -26,18 +29,68 @@ pub struct Float8 {
 }
 
 pub fn convert_obj(obj: &ObjFile) -> SMD {
-    let instance = SMD {entries: [].to_vec()};
+    let mut instance = SMD {entries: [].to_vec(), groups: [].to_vec()};
+
+    for face in obj.faces.iter() {
+        let mut smdEntry = SMDEntry {
+            image_name: "test.tga".to_owned(),
+            group: 0,
+            points: [].to_vec()
+        };
+
+        for component in face.components.iter() {
+            let vertexComponent = &obj.vertices[component.vertex - 1];
+            let normalComponent = &obj.texture_coordinates[component.texture - 1];
+            let textureComponent = &obj.normals[component.normal - 1];
+
+            smdEntry.points.push(Float8 {
+                x: vertexComponent.x, y: vertexComponent.y, z: vertexComponent.z,
+                x_norm: normalComponent.x, y_norm: normalComponent.y, z_norm: normalComponent.z,
+                u: textureComponent.x, v: textureComponent.y
+            });
+        };
+
+        instance.entries.push(smdEntry);
+    };
+
+    for group in obj.groups.iter() {
+        instance.groups.push(group.name.to_string());
+
+        for ndx in group.start..group.end {
+            let mut smdEntry = &mut instance.entries[ndx];
+
+            smdEntry.group = instance.groups.len() - 1;
+        }
+    };
 
     return instance;
 }
 
 impl SMD {
     pub fn to_string(&self) -> String {
-        return "".to_string();
+        let mut result = String::new();
+        
+        result.push_str("version 1\nnodes");
+
+        let mut ndx = 0;
+        for group in self.groups.iter() {
+            result.push_str(&format!("\n\t{}\t\"{}\"\t-1", ndx, group));
+            ndx += 1;
+        };
+
+        result.push_str(&"\nend\nskeleton\ntime 0\n\t0 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000\nend\ntriangles\n");
+
+        for entry in self.entries.iter() {
+            result.push_str(&entry.to_string());
+        };
+        
+        result.push_str(&"end\n");
+
+        return result.to_owned();
     }
 
     pub fn save(&self, path: &str) {
-
+        println!("this: {:?}", self);
     }
 
     pub fn is_valid(&self) -> bool {
@@ -56,7 +109,7 @@ impl SMD {
 }
 
 impl SMDEntry {
-    pub fn is_valid(&self) -> bool {
+    pub fn is_valid(&self) -> bool { 
         return self.image_name != "" && self.points.len() == 3;
     }
 
@@ -78,14 +131,14 @@ mod SMD_test_cases {
 
     #[test]
     fn is_invalid_when_has_0_entries() {
-        let smd = SMD {entries: [].to_vec()};
+        let smd = SMD {groups: [].to_vec(), entries: [].to_vec()};
 
         assert!(!smd.is_valid());
     }
 
     #[test]
     fn is_invalid_when_has_1_empty_smdentry() {
-        let mut smd = SMD {entries: [].to_vec()};
+        let mut smd = SMD {groups: [].to_vec(), entries: [].to_vec()};
 
         smd.entries.push(SMDEntry {group: 0, image_name: "".to_owned(), points: [].to_vec()});
 
@@ -94,7 +147,7 @@ mod SMD_test_cases {
 
     #[test]
     fn is_valid_when_has_1_valid_entry() {
-        let mut smd = SMD {entries: [].to_vec()};
+        let mut smd = SMD {groups: [].to_vec(), entries: [].to_vec()};
         let mut smdEntry = SMDEntry {group: 0, image_name: "test_image.tga".to_owned(), points: [].to_vec()};
 
         smdEntry.points.push(Float8 {
